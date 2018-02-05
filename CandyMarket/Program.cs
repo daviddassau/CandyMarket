@@ -15,23 +15,42 @@ namespace CandyMarket
             var dave = new User("Dave");
             var sam = new User("Sam");
 
+            var userList = new List<User> { keith, dave, sam };
+
+
             var keithsCandyBag = new CandyBag();
             keithsCandyBag.Owner = keith;
-            var bag = new Dictionary<CandyType, int>();
-            bag.Add((CandyType)1, 5);
-            keithsCandyBag.Bag = bag;
+            var bagOfKeith = new Dictionary<CandyType, int>();
+            bagOfKeith.Add((CandyType)1, 5);
+            keithsCandyBag.Bag = bagOfKeith;
+
+            var davesCandyBag = new CandyBag();
+            davesCandyBag.Owner = dave;
+            var bagOfDave = new Dictionary<CandyType, int>();
+            bagOfDave.Add((CandyType)2, 3);
+            davesCandyBag.Bag = bagOfDave;
+
+            var samsCandyBag = new CandyBag();
+            samsCandyBag.Owner = sam;
+            var bagOfSam = new Dictionary<CandyType, int>();
+            bagOfSam.Add((CandyType)2, 3);
+            samsCandyBag.Bag = bagOfSam;
+
 
             var run = true;
 			while (run)
 			{
-				ConsoleKeyInfo userInput = MainMenu();
+				ConsoleKeyInfo userInput = UserPicker(userList);
 
 				switch (userInput.KeyChar)
 				{
 					case '0':
 						run = false;
 						break;
-					case '1': // add candy to your bag
+                    case '1': // 
+
+                        break;
+                    case '2': // add candy to your bag
 
 						// select a candy type
 						var selectedCandyType = AddNewCandyType(db);
@@ -44,7 +63,7 @@ namespace CandyMarket
 						// if(moreDifficultDataModel) bug - this is passing candy type right now (which just increments in our DatabaseContext), but should also be passing candy details
 						db.SaveNewCandy(selectedCandyType.KeyChar);
 						break;
-					case '2':
+					case '3':
                         //eat candy
                         // select a candy type
                         var selectedCandyTypeToEat = AddNewCandyTypeToEat(db);
@@ -52,7 +71,7 @@ namespace CandyMarket
                         db.EatCandy(selectedCandyTypeToEat.KeyChar);  
 						// enjoy candy
 						break;
-					case '3':
+					case '4':
                         //throw away candy
                         // select a candy type
                         var selectedCandyTypeToThrowAway = AddNewCandyTypeToThrowAway(db);
@@ -63,7 +82,7 @@ namespace CandyMarket
                         // cry for lost candy
                         db.TrashCandy(selectedCandyTypeToThrowAway.KeyChar);
 						break;
-					case '4':
+					case '5':
                         /** give candy
 						 * feel free to hardcode your users. no need to create a whole UI to register users.
 						 * no one is impressed by user registration unless it's just amazingly fast & simple
@@ -75,11 +94,11 @@ namespace CandyMarket
 						 */
                          // Restructure beginning, to where it asks you which user you are
                          // Figure out how to store the data, then figure out how to collect the data
-                        var selectedCandyTypeToGive = AddNewCandyTypeToGive(db);
+                        //var selectedCandyTypeToGive = AddNewCandyTypeToGive(db);
 
 
 						break;
-					case '5':
+					case '6':
 						/** trade candy
 						 * this is the next logical step. who wants to just give away candy forever?
 						 */
@@ -104,9 +123,22 @@ namespace CandyMarket
 			return db;
 		}
 
+        static ConsoleKeyInfo UserPicker(List<User> userList)
+        {
+            var listOfNames = userList.Select(user => user.Name).ToList();
+            View userPicker = new View()
+                    .AddMenuText("Which user are you?")
+                    .AddMenuOptions(listOfNames);
+
+            Console.Write(userPicker.GetFullMenu());
+            ConsoleKeyInfo pickUser = Console.ReadKey();
 
 
-		static ConsoleKeyInfo MainMenu()
+
+            return pickUser;
+        }
+
+		static ConsoleKeyInfo CandyOptions()
 		{
 			View mainMenu = new View()
 					.AddMenuOption("Did you just get some new candy? Add it here.")
@@ -162,12 +194,12 @@ namespace CandyMarket
             return selectedCandyTypeToThrowAway;
         }
 
-        static ConsoleKeyInfo AddNewCandyTypeToGive(DatabaseContext db)
-        {
-            var whichUser = db.usersOfCandy();
+        //static ConsoleKeyInfo AddNewCandyTypeToGive(DatabaseContext db)
+        //{
+        //    var whichUser = db.usersOfCandy();
 
-            var newCandyMenu = new View()
-                .AddMenuText("Which user are you?")
-        }
+        //    var newCandyMenu = new View()
+        //        .AddMenuText("Which user are you?")
+        //}
     }
 }
